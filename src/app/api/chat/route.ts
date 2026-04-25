@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
         {
           type: "text",
           text: systemPrompt,
-          // @ts-expect-error: cache_control is a valid extended field
           cache_control: { type: "ephemeral" },
         },
       ],
