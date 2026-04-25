@@ -9,6 +9,7 @@ export interface BirthData {
   tobUnknown: boolean;
   city: string;
   country: string;
+  chartDetails?: string; // optional pasted chart data
 }
 
 const STORAGE_KEY = "astro_birth_data";
@@ -45,6 +46,8 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
   const [tobUnknown, setTobUnknown] = useState(false);
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [chartDetails, setChartDetails] = useState("");
+  const [showChartDetails, setShowChartDetails] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -60,6 +63,7 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
       tobUnknown,
       city: city.trim(),
       country: country.trim(),
+      chartDetails: chartDetails.trim() || undefined,
     };
     saveBirthData(data);
     onComplete(data);
@@ -84,6 +88,7 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
             { icon: "📅", label: "Date of birth", note: "Required" },
             { icon: "⏰", label: "Time of birth", note: "Optional — improves accuracy" },
             { icon: "📍", label: "City & country of birth", note: "Required" },
+            { icon: "📋", label: "Your chart details", note: "Optional — for a more precise reading" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3">
               <span className="text-xl shrink-0">{item.icon}</span>
@@ -208,6 +213,32 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
                 className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors"
               />
             </div>
+          </div>
+
+          {/* Optional chart details */}
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={() => setShowChartDetails(!showChartDetails)}
+              className="flex items-center gap-1.5 text-xs text-neutral-600 hover:text-neutral-400 transition-colors"
+            >
+              <span>{showChartDetails ? "▾" : "▸"}</span>
+              Have your chart details? Paste them for a more precise reading
+            </button>
+            {showChartDetails && (
+              <div className="mt-3">
+                <p className="text-xs text-neutral-700 mb-2">
+                  Copy your planetary positions, house cusps, or Dasha periods from any astrology app (AstroSage, Jagannatha Hora, Astro-Vision, etc.) and paste below.
+                </p>
+                <textarea
+                  value={chartDetails}
+                  onChange={(e) => setChartDetails(e.target.value)}
+                  placeholder="e.g. Sun 12°34' Aries, Moon 5°20' Scorpio, Lagna: Capricorn 18°, Saturn MD until Jan 2027..."
+                  rows={5}
+                  className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-xs text-neutral-300 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors resize-none"
+                />
+              </div>
+            )}
           </div>
 
           {error && (

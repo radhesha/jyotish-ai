@@ -19,6 +19,9 @@ function formatBirthContext(data: BirthData): string {
     `Time of birth: ${data.tobUnknown ? "Unknown" : data.tob || "Not provided"}`,
     `Place of birth: ${data.city}, ${data.country}`,
   ];
+  if (data.chartDetails) {
+    lines.push(`\nAdditional chart details provided by user:\n${data.chartDetails}`);
+  }
   return lines.join("\n");
 }
 
