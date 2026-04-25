@@ -139,7 +139,7 @@ export default function BlogPage() {
             Reading about astrology is one thing. Seeing it applied to your specific birth chart is another.
           </p>
           <Link
-            href="/signup"
+            href="/agents"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-amber-500 px-8 py-3 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors"
           >
             Chat with an Advisor Free →

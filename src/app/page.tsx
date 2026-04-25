@@ -61,14 +61,11 @@ export default function HomePage() {
             <Link href="/pricing" className="hover:text-neutral-100 transition-colors">Pricing</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-neutral-400 hover:text-neutral-100 transition-colors">
-              Sign in
-            </Link>
             <Link
-              href="/signup"
+              href="/agents"
               className="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors"
             >
-              Try Free
+              Try Free →
             </Link>
           </div>
         </div>
@@ -100,10 +97,10 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/signup"
+              href="/agents"
               className="rounded-full bg-amber-500 px-8 py-3.5 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
             >
-              Start for Free →
+              Start Free — No Sign Up →
             </Link>
             <Link
               href="#advisors"
@@ -112,7 +109,7 @@ export default function HomePage() {
               Meet the Advisors
             </Link>
           </div>
-          <p className="mt-4 text-sm text-neutral-600">No credit card needed · Free plan available</p>
+          <p className="mt-4 text-sm text-neutral-600">No sign up required · No credit card needed</p>
         </div>
 
         {/* Chat demo */}
@@ -384,7 +381,7 @@ export default function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href={plan.price === 0 ? "/signup" : "/pricing"}
+                  href={plan.price === 0 ? "/agents" : "/pricing"}
                   className={`mt-8 block rounded-full py-3 text-center text-sm font-semibold transition-colors ${
                     plan.highlight
                       ? "bg-amber-500 text-neutral-950 hover:bg-amber-400"
@@ -410,12 +407,12 @@ export default function HomePage() {
             Not vague horoscopes. Not generic advice. Personal insights from your birth chart — answered by a specialist who knows exactly what to look for.
           </p>
           <Link
-            href="/signup"
+            href="/agents"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-500 px-10 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
           >
             Chat with an Advisor Free →
           </Link>
-          <p className="mt-3 text-sm text-neutral-700">Free to start · No astrology knowledge required</p>
+          <p className="mt-3 text-sm text-neutral-700">No sign up · No credit card · No astrology knowledge needed</p>
         </div>
       </section>
 

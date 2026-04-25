@@ -66,14 +66,14 @@ export default function PricingPage() {
               </ul>
 
               <Link
-                href={plan.price === 0 ? "/signup" : `/signup?plan=${plan.id}`}
+                href={plan.price === 0 ? "/agents" : `/agents`}
                 className={`mt-8 block rounded-full py-3.5 text-center text-sm font-semibold transition-all ${
                   plan.highlight
                     ? "bg-amber-500 text-neutral-950 hover:bg-amber-400 shadow-lg shadow-amber-500/20"
                     : "border border-neutral-700 text-neutral-300 hover:border-neutral-500 hover:text-neutral-100"
                 }`}
               >
-                {plan.price === 0 ? "Start Free — No Card Required" : `Get ${plan.name}`}
+                {plan.price === 0 ? "Start Free — No Sign Up" : `Get ${plan.name}`}
               </Link>
             </div>
           ))}
