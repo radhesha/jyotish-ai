@@ -1,4 +1,4 @@
-export type AgentId =
+export type VedicAgentId =
   | "dhruva"
   | "ananya"
   | "lakshmi"
@@ -10,8 +10,25 @@ export type AgentId =
   | "pravasa"
   | "muhurta";
 
+export type KPAgentId =
+  | "kriya"
+  | "bandhu"
+  | "artha"
+  | "swastha"
+  | "kairos"
+  | "prashna"
+  | "chaya"
+  | "rekha"
+  | "nadi"
+  | "yatra";
+
+export type AgentId = VedicAgentId | KPAgentId;
+
+export type AstroSystem = "vedic" | "kp";
+
 export interface Agent {
   id: AgentId;
+  system: AstroSystem;
   name: string;
   title: string;
   specialty: string;
@@ -44,10 +61,10 @@ export interface PricingPlan {
   id: PricingTier;
   name: string;
   price: number;
-  priceId: string; // Stripe price ID
+  priceId: string;
   description: string;
   features: string[];
-  limit: number; // messages per month
+  limit: number;
   highlight?: boolean;
 }
 

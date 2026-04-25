@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PRICING_PLANS } from "@/lib/pricing";
-import { AGENTS } from "@/lib/agents";
+import { VEDIC_AGENTS, KP_AGENTS } from "@/lib/agents";
 
 export const metadata = {
   title: "Pricing — Astro AI",
@@ -81,9 +81,54 @@ export default function PricingPage() {
 
         {/* Advisor access table */}
         <div className="mt-20">
-          <h2 className="font-playfair text-2xl font-semibold text-neutral-100 mb-8 text-center">
+          <h2 className="font-playfair text-2xl font-semibold text-neutral-100 mb-2 text-center">
             Advisor Access by Plan
           </h2>
+          <p className="text-center text-sm text-neutral-600 mb-8">20 advisors across two systems — Vedic and KP</p>
+
+          {/* Vedic table */}
+          <h3 className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span>☉</span> Vedic Advisors (Parashara &amp; Jaimini)
+          </h3>
+          <div className="overflow-x-auto rounded-2xl border border-neutral-800 mb-8">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-neutral-800 bg-neutral-900/60">
+                  <th className="px-6 py-4 text-left text-neutral-400 font-medium">Advisor</th>
+                  <th className="px-6 py-4 text-center text-neutral-400 font-medium">Seeker (Free)</th>
+                  <th className="px-6 py-4 text-center text-amber-400 font-medium">Practitioner ($19)</th>
+                  <th className="px-6 py-4 text-center text-violet-400 font-medium">Jyotiṣī ($49)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {VEDIC_AGENTS.map((agent, i) => (
+                  <tr key={agent.id} className={`border-b border-neutral-800/50 ${i % 2 === 0 ? "" : "bg-neutral-900/20"}`}>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <span>{agent.icon}</span>
+                        <div>
+                          <p className="font-medium text-neutral-200">{agent.name}</p>
+                          <p className="text-xs text-neutral-600">{agent.title}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {agent.tier === "free" ? <span className="text-amber-400">✓</span> : <span className="text-neutral-700">—</span>}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {agent.tier === "free" || agent.tier === "pro" ? <span className="text-amber-400">✓</span> : <span className="text-neutral-700">—</span>}
+                    </td>
+                    <td className="px-6 py-4 text-center"><span className="text-amber-400">✓</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* KP table */}
+          <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span>⊕</span> KP Advisors (Krishnamurti Paddhati)
+          </h3>
           <div className="overflow-x-auto rounded-2xl border border-neutral-800">
             <table className="w-full text-sm">
               <thead>
@@ -95,11 +140,8 @@ export default function PricingPage() {
                 </tr>
               </thead>
               <tbody>
-                {AGENTS.map((agent, i) => (
-                  <tr
-                    key={agent.id}
-                    className={`border-b border-neutral-800/50 ${i % 2 === 0 ? "" : "bg-neutral-900/20"}`}
-                  >
+                {KP_AGENTS.map((agent, i) => (
+                  <tr key={agent.id} className={`border-b border-neutral-800/50 ${i % 2 === 0 ? "" : "bg-neutral-900/20"}`}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <span>{agent.icon}</span>
@@ -110,22 +152,12 @@ export default function PricingPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {agent.tier === "free" ? (
-                        <span className="text-amber-400">✓</span>
-                      ) : (
-                        <span className="text-neutral-700">—</span>
-                      )}
+                      {agent.tier === "free" ? <span className="text-violet-400">✓</span> : <span className="text-neutral-700">—</span>}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {agent.tier === "free" || agent.tier === "pro" ? (
-                        <span className="text-amber-400">✓</span>
-                      ) : (
-                        <span className="text-neutral-700">—</span>
-                      )}
+                      {agent.tier === "free" || agent.tier === "pro" ? <span className="text-violet-400">✓</span> : <span className="text-neutral-700">—</span>}
                     </td>
-                    <td className="px-6 py-4 text-center">
-                      <span className="text-amber-400">✓</span>
-                    </td>
+                    <td className="px-6 py-4 text-center"><span className="text-violet-400">✓</span></td>
                   </tr>
                 ))}
               </tbody>

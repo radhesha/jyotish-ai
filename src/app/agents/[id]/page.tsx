@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { AGENTS, getAgent } from "@/lib/agents";
+import { getAgent } from "@/lib/agents";
 import type { Message } from "@/types";
 
 function generateId() {
