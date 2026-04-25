@@ -1,10 +1,10 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
 import { getSystemPrompt } from "@/lib/system-prompts";
 import type { AgentId } from "@/types";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: NextRequest) {
@@ -17,41 +17,32 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = getSystemPrompt(agentId as AgentId);
 
-    // Inject birth chart context as the first user message if provided
-    const contextBlock = chartContext
-      ? `[Birth Chart Data]\n${JSON.stringify(chartContext, null, 2)}\n\n`
-      : "";
+    // Build system message — prepend birth chart data if provided
+    const fullSystem = chartContext
+      ? `${systemPrompt}\n\n[User's Birth Chart Data]\n${chartContext}`
+      : systemPrompt;
 
-    // Prepend context to the first user message for prompt caching
-    const messagesWithContext = messages.map(
-      (m: { role: string; content: string }, i: number) =>
-        i === 0 && m.role === "user"
-          ? { ...m, content: contextBlock + m.content }
-          : m
-    );
-
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
       max_tokens: 1500,
-      system: [
-        {
-          type: "text",
-          text: systemPrompt,
-          cache_control: { type: "ephemeral" },
-        },
+      messages: [
+        { role: "system", content: fullSystem },
+        ...messages.map((m: { role: string; content: string }) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+        })),
       ],
-      messages: messagesWithContext,
     });
 
-    const content = response.content[0];
-    if (content.type !== "text") {
-      return NextResponse.json({ error: "Unexpected response type" }, { status: 500 });
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      return NextResponse.json({ error: "No response from model" }, { status: 500 });
     }
 
     return NextResponse.json({
-      content: content.text,
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
+      content,
+      inputTokens: response.usage?.prompt_tokens,
+      outputTokens: response.usage?.completion_tokens,
     });
   } catch (err) {
     console.error("Chat API error:", err);
