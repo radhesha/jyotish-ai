@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { VEDIC_AGENTS, KP_AGENTS } from "@/lib/agents";
 import { PRICING_PLANS } from "@/lib/pricing";
+import { getRecentPosts } from "@/lib/posts";
 import type { Agent } from "@/types";
 
 function AgentCard({ agent }: { agent: Agent }) {
@@ -35,7 +36,12 @@ function AgentCard({ agent }: { agent: Agent }) {
   );
 }
 
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
 export default function HomePage() {
+  const recentPosts = getRecentPosts(3);
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
 
@@ -51,6 +57,7 @@ export default function HomePage() {
           <div className="hidden items-center gap-8 text-sm text-neutral-400 md:flex">
             <Link href="#advisors" className="hover:text-neutral-100 transition-colors">Advisors</Link>
             <Link href="#how" className="hover:text-neutral-100 transition-colors">How It Works</Link>
+            <Link href="/blog" className="hover:text-neutral-100 transition-colors">Blog</Link>
             <Link href="/pricing" className="hover:text-neutral-100 transition-colors">Pricing</Link>
           </div>
           <div className="flex items-center gap-3">
@@ -301,6 +308,46 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* BLOG PREVIEW */}
+      <section className="py-24 px-6 border-t border-neutral-800/40">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <h2 className="font-playfair text-3xl font-bold text-neutral-100 md:text-4xl">
+                From the Blog
+              </h2>
+              <p className="mt-2 text-neutral-500 text-sm">Astrology explained in plain English</p>
+            </div>
+            <Link href="/blog" className="shrink-0 text-sm text-amber-400 hover:underline">
+              View all articles →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {recentPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex flex-col rounded-2xl border border-neutral-800 bg-neutral-900/50 overflow-hidden hover:border-neutral-700 hover:bg-neutral-900 transition-all"
+              >
+                <div className="flex h-28 items-center justify-center bg-neutral-800/40 text-5xl">
+                  {post.emoji}
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <span className="mb-2 text-xs text-neutral-700">{post.category}</span>
+                  <h3 className="font-playfair text-base font-bold text-neutral-200 group-hover:text-amber-400 transition-colors leading-snug flex-1">
+                    {post.title}
+                  </h3>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-xs text-neutral-700">{formatDate(post.publishedAt)}</span>
+                    <span className="text-xs text-neutral-700">{post.readTime} min read</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PRICING */}
       <section className="py-24 px-6 border-t border-neutral-800/40">
         <div className="mx-auto max-w-5xl text-center">
@@ -383,8 +430,9 @@ export default function HomePage() {
             Personalised Vedic astrology guidance, powered by AI. For reflective and educational purposes.
           </p>
           <div className="flex gap-6 text-sm text-neutral-700">
-            <Link href="/pricing" className="hover:text-neutral-400 transition-colors">Pricing</Link>
+            <Link href="/blog" className="hover:text-neutral-400 transition-colors">Blog</Link>
             <Link href="/agents" className="hover:text-neutral-400 transition-colors">Advisors</Link>
+            <Link href="/pricing" className="hover:text-neutral-400 transition-colors">Pricing</Link>
           </div>
         </div>
       </footer>
