@@ -3,7 +3,7 @@ import { PRICING_PLANS } from "@/lib/pricing";
 import { AGENTS } from "@/lib/agents";
 
 export const metadata = {
-  title: "Pricing — Jyotish AI",
+  title: "Pricing — Astro AI",
   description: "Choose the right plan for your Vedic astrology consultation needs.",
 };
 

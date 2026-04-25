@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AGENTS } from "@/lib/agents";
 
 export const metadata = {
-  title: "AI Advisors — Jyotish AI",
+  title: "AI Advisors — Astro AI",
   description: "Browse all 10 specialized Vedic astrology AI advisors.",
 };
 

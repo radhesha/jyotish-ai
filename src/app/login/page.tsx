@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Sign In — Jyotish AI",
+  title: "Sign In — Astro AI",
 };
 
 export default function LoginPage() {
@@ -9,7 +9,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-950 px-6 py-16">
       <Link href="/" className="mb-8 flex items-center gap-2">
         <span className="text-2xl text-amber-400">☸</span>
-        <span className="font-playfair text-xl font-bold text-amber-400">Jyotish AI</span>
+        <span className="font-playfair text-xl font-bold text-amber-400">Astro AI</span>
       </Link>
 
       <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900/60 p-8 backdrop-blur-sm">

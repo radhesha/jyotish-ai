@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Jyotish AI — Vedic Astrology Consultants",
+  title: "Astro AI — Vedic Astrology Consultants",
   description:
     "Consult 10 specialized AI Vedic astrology advisors. Career, relationships, wealth, health, timing, spirituality, and more — powered by classical Jyotiṣa and Claude AI.",
   keywords: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "Parashara",
   ],
   openGraph: {
-    title: "Jyotish AI — Vedic Astrology Consultants",
+    title: "Astro AI — Vedic Astrology Consultants",
     description: "10 specialized AI advisors for every area of Vedic astrology.",
     type: "website",
   },

@@ -11,7 +11,7 @@ export default function HomePage() {
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">☸</span>
             <span className="font-playfair text-xl font-bold tracking-wide text-amber-400">
-              Jyotish AI
+              Astro AI
             </span>
           </Link>
           <div className="hidden items-center gap-8 text-sm text-neutral-400 md:flex">
@@ -94,7 +94,7 @@ export default function HomePage() {
               <div className="h-3 w-3 rounded-full bg-red-500" />
               <div className="h-3 w-3 rounded-full bg-yellow-500" />
               <div className="h-3 w-3 rounded-full bg-green-500" />
-              <span className="ml-3 text-sm text-neutral-500">Jyotish AI — Kāla (Timing Advisor)</span>
+              <span className="ml-3 text-sm text-neutral-500">Astro AI — Kāla (Timing Advisor)</span>
             </div>
             <div className="space-y-3 text-left">
               <div className="flex gap-3">
@@ -191,7 +191,7 @@ export default function HomePage() {
               {
                 step: "01",
                 title: "Enter Your Birth Details",
-                desc: "Provide your date, time, and place of birth. Jyotish AI computes your sidereal Vedic chart — Lagna, planetary positions, Daśā balance, and more.",
+                desc: "Provide your date, time, and place of birth. Astro AI computes your sidereal Vedic chart — Lagna, planetary positions, Daśā balance, and more.",
                 icon: "🌍",
               },
               {
@@ -304,7 +304,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex items-center gap-2">
             <span className="text-xl text-amber-400">☸</span>
-            <span className="font-playfair font-semibold text-neutral-400">Jyotish AI</span>
+            <span className="font-playfair font-semibold text-neutral-400">Astro AI</span>
           </div>
           <p className="text-sm text-neutral-600">
             Classical Jyotiṣa wisdom, powered by AI. For educational and reflective purposes.
