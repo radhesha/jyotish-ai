@@ -21,15 +21,15 @@ function AgentCard({ agent }: { agent: Agent }) {
         </span>
       )}
       <div className="mb-3 text-3xl">{agent.icon}</div>
-      <h3 className="font-playfair text-lg font-semibold text-neutral-100">{agent.name}</h3>
+      <h3 className="font-semibold text-neutral-100">{agent.name}</h3>
       <p className="mt-0.5 text-xs font-medium" style={{ color: agent.color }}>
         {agent.title}
       </p>
-      <p className="mt-2 text-xs leading-relaxed text-neutral-500 group-hover:text-neutral-400 transition-colors line-clamp-3">
+      <p className="mt-2 text-xs leading-relaxed text-neutral-500 group-hover:text-neutral-400 transition-colors line-clamp-2">
         {agent.description}
       </p>
       <div className="mt-3 text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: agent.color }}>
-        Consult →
+        Chat now →
       </div>
     </Link>
   );
@@ -61,7 +61,7 @@ export default function HomePage() {
               href="/signup"
               className="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors"
             >
-              Get Started Free
+              Try Free
             </Link>
           </div>
         </div>
@@ -70,24 +70,25 @@ export default function HomePage() {
       {/* HERO */}
       <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20 text-center">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/5 blur-3xl" />
+          <div className="absolute left-1/2 top-1/3 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/5 blur-3xl" />
           <div className="absolute left-1/3 top-2/3 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-3xl" />
         </div>
 
         <div className="relative max-w-4xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-sm text-amber-400">
             <span>✦</span>
-            <span>20 Specialized AI Astrology Advisors · Vedic &amp; KP</span>
+            <span>Personal AI advisors powered by Vedic astrology</span>
           </div>
 
           <h1 className="font-playfair text-5xl font-bold leading-tight tracking-tight text-neutral-100 md:text-7xl">
-            Ancient Wisdom,{" "}
-            <span className="text-gradient">AI Precision</span>
+            Get answers about{" "}
+            <span className="text-gradient">your life</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-neutral-400 md:text-xl">
-            Consult specialist AI advisors trained in classical Vedic and KP astrology — career,
-            relationships, wealth, health, timing, spiritual path, and more.
+            Talk to 20 AI advisors — each a specialist in a different area of life.
+            Career, love, money, health, travel, timing, and more.
+            All based on your personal birth chart.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -95,7 +96,7 @@ export default function HomePage() {
               href="/signup"
               className="rounded-full bg-amber-500 px-8 py-3.5 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
             >
-              Start Free Consultation →
+              Start for Free →
             </Link>
             <Link
               href="#advisors"
@@ -104,33 +105,31 @@ export default function HomePage() {
               Meet the Advisors
             </Link>
           </div>
-          <p className="mt-4 text-sm text-neutral-600">Free tier available · No credit card required</p>
+          <p className="mt-4 text-sm text-neutral-600">No credit card needed · Free plan available</p>
         </div>
 
-        {/* Chat preview */}
-        <div className="relative mt-16 w-full max-w-3xl">
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-2xl backdrop-blur-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="h-3 w-3 rounded-full bg-red-500" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500" />
-              <div className="h-3 w-3 rounded-full bg-green-500" />
-              <span className="ml-3 text-sm text-neutral-500">Astro AI — Kairos · KP Timing Advisor</span>
+        {/* Chat demo */}
+        <div className="relative mt-16 w-full max-w-2xl">
+          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/70 p-6 shadow-2xl backdrop-blur-sm text-left">
+            <div className="flex items-center gap-2 mb-5 pb-4 border-b border-neutral-800">
+              <span className="text-xl">🎯</span>
+              <div>
+                <p className="text-sm font-semibold text-neutral-200">Kriya</p>
+                <p className="text-xs text-amber-400">Career Advisor</p>
+              </div>
             </div>
-            <div className="space-y-3 text-left">
-              <div className="flex gap-3">
-                <span className="text-neutral-500 text-sm shrink-0">You</span>
-                <p className="rounded-xl bg-neutral-800 px-4 py-2.5 text-sm text-neutral-300">
-                  Will I get the job offer I interviewed for last week?
-                </p>
+            <div className="space-y-4">
+              <div className="flex justify-end">
+                <div className="rounded-2xl rounded-br-none bg-neutral-700 px-4 py-2.5 text-sm text-neutral-200 max-w-xs">
+                  Will I get the job I just interviewed for?
+                </div>
               </div>
               <div className="flex gap-3">
-                <span className="text-violet-400 text-sm shrink-0">Kairos</span>
-                <div className="rounded-xl bg-neutral-800/60 border border-violet-500/20 px-4 py-2.5 text-sm text-neutral-300 leading-relaxed">
-                  Your <strong className="text-violet-400">10th cusp sub-lord Mercury</strong> signifies
-                  houses 2, 6, 10, and 11 — the event is <strong className="text-green-400">promised</strong>.
-                  The operative Dasha is <em className="text-amber-400">Mercury/Venus</em>, and both are
-                  significators of the 11th house (fulfillment). The Ruling Planets at your query time
-                  confirm Mercury strongly. Expect a positive outcome within <strong className="text-violet-400">the next 3–5 weeks</strong>…
+                <span className="text-xl shrink-0 mt-1">🎯</span>
+                <div className="rounded-2xl rounded-bl-none border border-amber-500/20 bg-neutral-800/60 px-4 py-3 text-sm text-neutral-300 leading-relaxed max-w-sm">
+                  Based on your chart, this looks{" "}
+                  <strong className="text-green-400">very promising</strong>. Your career planets are active right now and pointing toward a new opportunity. I&apos;d expect a positive outcome within the{" "}
+                  <strong className="text-amber-400">next 3 to 5 weeks</strong>. This also lines up with a strong earning period starting next month…
                 </div>
               </div>
             </div>
@@ -138,27 +137,81 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* SOCIAL PROOF / TRUST */}
+      <section className="py-12 px-6 border-y border-neutral-800/40">
+        <div className="mx-auto max-w-4xl">
+          <div className="flex flex-wrap justify-center gap-8 text-center">
+            {[
+              { stat: "20", label: "Specialist Advisors" },
+              { stat: "Career · Love · Money", label: "Topics covered" },
+              { stat: "Vedic & KP", label: "Astrology systems" },
+              { stat: "Free", label: "To get started" },
+            ].map((item) => (
+              <div key={item.label}>
+                <p className="text-xl font-bold text-amber-400">{item.stat}</p>
+                <p className="text-sm text-neutral-600 mt-0.5">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHAT CAN YOU ASK */}
+      <section className="py-24 px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="font-playfair text-3xl font-bold text-neutral-100 md:text-4xl">
+            What do you want to know?
+          </h2>
+          <p className="mt-4 text-neutral-500 max-w-lg mx-auto">
+            Pick a question and we&apos;ll connect you to the right advisor.
+          </p>
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
+            {[
+              { q: "When will I find love?", emoji: "💑", href: "/agents/ananya" },
+              { q: "Should I change careers?", emoji: "🌟", href: "/agents/dhruva" },
+              { q: "Will I get this job?", emoji: "🎯", href: "/agents/kriya" },
+              { q: "When will I earn more?", emoji: "💰", href: "/agents/lakshmi" },
+              { q: "Will my visa be approved?", emoji: "🌏", href: "/agents/yatra" },
+              { q: "What's my life purpose?", emoji: "🕯️", href: "/agents/jyoti" },
+              { q: "When should I start my business?", emoji: "🗓️", href: "/agents/muhurta" },
+              { q: "Will I buy a house soon?", emoji: "🏠", href: "/agents/chaya" },
+              { q: "How's my health this year?", emoji: "🌿", href: "/agents/arogya" },
+              { q: "When will things get better?", emoji: "⏳", href: "/agents/kala" },
+            ].map((item) => (
+              <Link
+                key={item.q}
+                href={item.href}
+                className="flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900/60 px-5 py-2.5 text-sm text-neutral-400 hover:border-neutral-600 hover:text-neutral-200 transition-all"
+              >
+                <span>{item.emoji}</span>
+                {item.q}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ADVISORS SECTION */}
-      <section id="advisors" className="py-24 px-6">
+      <section id="advisors" className="py-16 px-6 border-t border-neutral-800/40">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 text-center">
             <h2 className="font-playfair text-4xl font-bold text-neutral-100 md:text-5xl">
-              Two Systems. 20 Specialists.
+              Your Advisor Team
             </h2>
-            <p className="mt-4 text-neutral-400 max-w-2xl mx-auto">
-              Classical Vedic astrology for life-path guidance and spiritual insight. KP astrology for precise event timing and exact predictions. Each system has its own dedicated team of advisors.
+            <p className="mt-4 text-neutral-500 max-w-xl mx-auto">
+              Each advisor is a specialist. Pick the one that matches your question — not a one-size-fits-all chatbot.
             </p>
           </div>
 
-          {/* Vedic advisors */}
-          <div className="mb-16">
-            <div className="mb-6 flex items-center gap-4">
-              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2">
-                <span className="text-amber-400 font-semibold text-sm">☉ Vedic Advisors</span>
-                <span className="ml-2 text-xs text-amber-600">Parashara · Jaimini · 10 specialists</span>
+          {/* Life Guidance advisors */}
+          <div className="mb-14">
+            <div className="mb-5 flex items-center gap-4">
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 shrink-0">
+                <span className="text-amber-400 font-semibold text-sm">Life Guidance</span>
+                <span className="ml-2 text-xs text-amber-700">Big picture · Patterns · Purpose</span>
               </div>
               <div className="flex-1 h-px bg-neutral-800" />
-              <Link href="/agents?system=vedic" className="text-sm text-neutral-500 hover:text-amber-400 transition-colors">
+              <Link href="/agents" className="shrink-0 text-sm text-neutral-600 hover:text-amber-400 transition-colors">
                 View all →
               </Link>
             </div>
@@ -169,15 +222,15 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* KP advisors */}
+          {/* Precise Predictions advisors */}
           <div>
-            <div className="mb-6 flex items-center gap-4">
-              <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-2">
-                <span className="text-violet-400 font-semibold text-sm">⊕ KP Advisors</span>
-                <span className="ml-2 text-xs text-violet-600">Krishnamurti Paddhati · 10 specialists</span>
+            <div className="mb-5 flex items-center gap-4">
+              <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-2 shrink-0">
+                <span className="text-violet-400 font-semibold text-sm">Precise Predictions</span>
+                <span className="ml-2 text-xs text-violet-700">Yes/No answers · Exact timing</span>
               </div>
               <div className="flex-1 h-px bg-neutral-800" />
-              <Link href="/agents?system=kp" className="text-sm text-neutral-500 hover:text-violet-400 transition-colors">
+              <Link href="/agents" className="shrink-0 text-sm text-neutral-600 hover:text-violet-400 transition-colors">
                 View all →
               </Link>
             </div>
@@ -198,59 +251,51 @@ export default function HomePage() {
               How It Works
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {[
               {
-                step: "01",
-                icon: "🌍",
-                title: "Enter Your Birth Details",
-                desc: "Provide your date, time, and place of birth. Astro AI computes your sidereal chart — Lagna, planetary positions, Daśā balance, and KP cusps.",
+                step: "1",
+                icon: "📅",
+                title: "Enter your birth details",
+                desc: "Your date, time, and place of birth. That's all we need to build your personal birth chart — the map that makes every reading personal to you.",
               },
               {
-                step: "02",
+                step: "2",
                 icon: "🎯",
-                title: "Choose System & Advisor",
-                desc: "Pick Vedic for Yogas, Daśā guidance, and spiritual insight — or KP for precise event timing and yes/no prediction. Then select the right specialist.",
+                title: "Pick your advisor",
+                desc: "Choose the specialist that matches your question. Career worries? Talk to Dhruva. Want to know when you'll marry? Ask Ananya or Bandhu. Need a yes/no answer fast? Try Prashna.",
               },
               {
-                step: "03",
-                icon: "✦",
-                title: "Get Classical Insights",
-                desc: "Your advisor analyzes your actual chart using the correct system's rules — not generic sun signs. Receive specific, grounded, actionable guidance.",
+                step: "3",
+                icon: "💬",
+                title: "Get your answer",
+                desc: "Chat naturally — no astrology knowledge needed. Your advisor reads your chart and gives you clear, personalised insights in plain English.",
               },
             ].map((item) => (
-              <div key={item.step}>
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="text-3xl">{item.icon}</span>
-                  <span className="text-4xl font-bold text-neutral-800">{item.step}</span>
+              <div key={item.step} className="text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900 text-2xl">
+                  {item.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-neutral-100 mb-2">{item.title}</h3>
-                <p className="text-neutral-500 leading-relaxed">{item.desc}</p>
+                <div className="mb-2 text-sm font-bold text-amber-400 uppercase tracking-wider">Step {item.step}</div>
+                <h3 className="text-lg font-semibold text-neutral-100 mb-2">{item.title}</h3>
+                <p className="text-neutral-500 leading-relaxed text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
 
-          {/* Vedic vs KP comparison */}
-          <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Two types callout */}
+          <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
-              <div className="mb-4 text-2xl">☉</div>
-              <h3 className="font-playfair text-xl font-semibold text-amber-400 mb-2">Vedic Astrology</h3>
-              <p className="text-sm text-neutral-500 mb-4">Best for deep life-path analysis, Yoga identification, spiritual evolution, and long-arc Daśā timing.</p>
-              <ul className="space-y-2 text-sm text-neutral-400">
-                {["Parashara & Jaimini rules", "Vimshottari Daśā system", "Navāṃśa & divisional charts", "Yogas & planetary combinations", "Ātmakāraka & soul-level purpose"].map(f => (
-                  <li key={f} className="flex items-center gap-2"><span className="text-amber-400">✓</span>{f}</li>
-                ))}
-              </ul>
+              <p className="text-amber-400 font-semibold mb-2">✦ Life Guidance advisors</p>
+              <p className="text-sm text-neutral-500 leading-relaxed">
+                Best for understanding your life path, relationship patterns, career direction, spiritual growth, and long-term cycles. Great for big-picture questions.
+              </p>
             </div>
             <div className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-6">
-              <div className="mb-4 text-2xl">⊕</div>
-              <h3 className="font-playfair text-xl font-semibold text-violet-400 mb-2">KP Astrology</h3>
-              <p className="text-sm text-neutral-500 mb-4">Best for precise event prediction, yes/no answers, exact timing, and horary (Prashna) questions.</p>
-              <ul className="space-y-2 text-sm text-neutral-400">
-                {["Placidus cusps & KP ayanamsa", "249 sub-lord table", "Cuspal interlink method", "Ruling Planets technique", "KP Horary (Prashna) analysis"].map(f => (
-                  <li key={f} className="flex items-center gap-2"><span className="text-violet-400">✓</span>{f}</li>
-                ))}
-              </ul>
+              <p className="text-violet-400 font-semibold mb-2">⊕ Precise Prediction advisors</p>
+              <p className="text-sm text-neutral-500 leading-relaxed">
+                Best for specific, timed questions — will this happen? When? These advisors give direct answers using a system built for accurate event prediction.
+              </p>
             </div>
           </div>
         </div>
@@ -262,7 +307,7 @@ export default function HomePage() {
           <h2 className="font-playfair text-4xl font-bold text-neutral-100 md:text-5xl">
             Simple Pricing
           </h2>
-          <p className="mt-4 text-neutral-400">Start free. Upgrade for full access to all 20 advisors.</p>
+          <p className="mt-4 text-neutral-500">Start free. No credit card needed.</p>
           <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
             {PRICING_PLANS.map((plan) => (
               <div
@@ -312,17 +357,18 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="text-5xl mb-6">☸</div>
           <h2 className="font-playfair text-4xl font-bold text-neutral-100 md:text-5xl">
-            Begin Your Astrology Journey
+            Your questions deserve real answers
           </h2>
-          <p className="mt-4 text-lg text-neutral-400 max-w-xl mx-auto">
-            Whether you seek Vedic wisdom or KP precision — your birth chart holds the answers. Let AI-powered classical astrology illuminate the path.
+          <p className="mt-4 text-lg text-neutral-500 max-w-xl mx-auto">
+            Not vague horoscopes. Not generic advice. Personal insights from your birth chart — answered by a specialist who knows exactly what to look for.
           </p>
           <Link
             href="/signup"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-500 px-10 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
           >
-            Consult Your First Advisor Free →
+            Chat with an Advisor Free →
           </Link>
+          <p className="mt-3 text-sm text-neutral-700">Free to start · No astrology knowledge required</p>
         </div>
       </section>
 
@@ -331,12 +377,12 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex items-center gap-2">
             <span className="text-xl text-amber-400">☸</span>
-            <span className="font-playfair font-semibold text-neutral-400">Astro AI</span>
+            <span className="font-playfair font-semibold text-neutral-500">Astro AI</span>
           </div>
-          <p className="text-sm text-neutral-600">
-            Classical Vedic &amp; KP astrology, powered by AI. For educational and reflective purposes.
+          <p className="text-sm text-neutral-700">
+            Personalised Vedic astrology guidance, powered by AI. For reflective and educational purposes.
           </p>
-          <div className="flex gap-6 text-sm text-neutral-600">
+          <div className="flex gap-6 text-sm text-neutral-700">
             <Link href="/pricing" className="hover:text-neutral-400 transition-colors">Pricing</Link>
             <Link href="/agents" className="hover:text-neutral-400 transition-colors">Advisors</Link>
           </div>

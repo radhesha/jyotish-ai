@@ -17,7 +17,7 @@ export default function LoginPage() {
           Welcome back
         </h1>
         <p className="text-sm text-neutral-500 mb-8">
-          Continue your Jyotiṣa consultation.
+          Continue your conversations with your advisors.
         </p>
 
         <form className="space-y-4">

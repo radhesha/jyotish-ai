@@ -132,10 +132,16 @@ export default function AgentChatPage() {
             <div className="text-5xl">{agent.icon}</div>
             <div>
               <h2 className="font-playfair text-2xl font-semibold text-neutral-100">
-                Namaste, I am {agent.name}
+                Hi, I&apos;m {agent.name}
               </h2>
-              <p className="mt-2 text-neutral-500 max-w-md">
+              <p className="mt-1 text-sm font-medium" style={{ color: agent.color }}>
+                {agent.title}
+              </p>
+              <p className="mt-3 text-neutral-500 max-w-md text-sm leading-relaxed">
                 {agent.description}
+              </p>
+              <p className="mt-3 text-xs text-neutral-700">
+                Ask me anything — or pick a question below to get started.
               </p>
             </div>
             <div className="mt-2 grid grid-cols-1 gap-2 w-full max-w-lg sm:grid-cols-2">
@@ -197,7 +203,7 @@ export default function AgentChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={`Ask ${agent.name} anything…`}
+            placeholder={`Ask anything — type your question here…`}
             rows={1}
             className="flex-1 resize-none rounded-xl border border-neutral-700 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 outline-none focus:border-amber-500/60 transition-colors max-h-36 overflow-y-auto"
           />

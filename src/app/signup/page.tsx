@@ -14,10 +14,10 @@ export default function SignupPage() {
 
       <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900/60 p-8 backdrop-blur-sm">
         <h1 className="font-playfair text-2xl font-bold text-neutral-100 mb-1">
-          Create your account
+          Get your first reading free
         </h1>
         <p className="text-sm text-neutral-500 mb-8">
-          Free to start. No credit card required.
+          No credit card needed. No astrology knowledge required.
         </p>
 
         <form className="space-y-4">
@@ -46,7 +46,7 @@ export default function SignupPage() {
             type="submit"
             className="w-full rounded-full bg-amber-500 py-3.5 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors mt-2"
           >
-            Create Free Account
+            Create Free Account →
           </button>
         </form>
 
@@ -59,7 +59,7 @@ export default function SignupPage() {
 
         <p className="mt-6 text-center text-xs text-neutral-700 leading-relaxed">
           By creating an account you agree to our Terms of Service.
-          Jyotiṣa AI responses are for educational purposes only.
+          Readings are for personal reflection and guidance only.
         </p>
       </div>
     </div>
