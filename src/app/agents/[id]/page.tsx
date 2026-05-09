@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { getAgent } from "@/lib/agents";
@@ -11,6 +11,7 @@ import {
 } from "@/components/BirthDetailsForm";
 import type { BirthData } from "@/components/BirthDetailsForm";
 import type { ComputedChart, Message } from "@/types";
+import { supabase } from "@/lib/supabase";
 
 function generateId() {
   return Math.random().toString(36).slice(2, 11);
@@ -151,12 +152,50 @@ export default function AgentChatPage() {
   const [messages, setMessages]           = useState<Message[]>([]);
   const [input, setInput]                 = useState("");
   const [loading, setLoading]             = useState(false);
+  const [userId, setUserId]               = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Save messages to Supabase (upsert by user + agent)
+  const saveMessages = useCallback(async (msgs: Message[], uid: string, agentId: string) => {
+    if (!uid) return;
+    const payload = msgs.map(m => ({ role: m.role, content: m.content, timestamp: m.timestamp }));
+    await supabase.from("readings").upsert(
+      { user_id: uid, agent_id: agentId, messages: payload, updated_at: new Date().toISOString() },
+      { onConflict: "user_id,agent_id" }
+    );
+  }, []);
+
+  // Load chart data + auth state + previous messages
   useEffect(() => {
     setBirthData(loadBirthData());
     setComputedChart(loadComputedChart());
     setDataLoaded(true);
+
+    // Check if user is logged in; if so, load saved messages
+    supabase.auth.getUser().then(async ({ data }) => {
+      const uid = data.user?.id ?? null;
+      setUserId(uid);
+
+      if (uid && agent) {
+        const { data: row } = await supabase
+          .from("readings")
+          .select("messages")
+          .eq("user_id", uid)
+          .eq("agent_id", agent.id)
+          .maybeSingle();
+
+        if (row?.messages?.length) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setMessages(row.messages.map((m: any) => ({
+            id: generateId(),
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(m.timestamp ?? Date.now()),
+          })));
+        }
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -220,15 +259,17 @@ export default function AgentChatPage() {
       });
 
       const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: generateId(),
-          role: "assistant",
-          content: data.content ?? data.error ?? "I was unable to process that request.",
-          timestamp: new Date(),
-        },
-      ]);
+      const assistantMsg: Message = {
+        id: generateId(),
+        role: "assistant",
+        content: data.content ?? data.error ?? "I was unable to process that request.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => {
+        const next = [...prev, assistantMsg];
+        if (userId && agent) saveMessages(next, userId, agent.id);
+        return next;
+      });
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -256,6 +297,17 @@ export default function AgentChatPage() {
     setBirthData(null);
     setComputedChart(null);
     setMessages([]);
+  };
+
+  const handleClearHistory = async () => {
+    setMessages([]);
+    if (userId && agent) {
+      await supabase
+        .from("readings")
+        .update({ messages: [], updated_at: new Date().toISOString() })
+        .eq("user_id", userId)
+        .eq("agent_id", agent.id);
+    }
   };
 
   return (
@@ -289,6 +341,15 @@ export default function AgentChatPage() {
                 {birthData.name ? `${birthData.name} · ` : ""}{birthData.dob} · {birthData.city}
               </span>
             </Link>
+            {userId && messages.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                title="Clear conversation history"
+                className="text-xs text-zinc-700 hover:text-red-400 transition-colors px-2 py-1.5"
+              >
+                ✕ Clear
+              </button>
+            )}
             <button
               onClick={handleResetBirthData}
               title="Change birth details"
