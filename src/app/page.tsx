@@ -62,6 +62,18 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
+              href="/login"
+              className="hidden md:block text-sm text-neutral-400 hover:text-neutral-100 transition-colors px-3 py-2"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="hidden md:block rounded-full border border-zinc-700 px-4 py-2 text-sm text-zinc-300 hover:border-zinc-500 hover:text-zinc-100 transition-colors"
+            >
+              Sign Up
+            </Link>
+            <Link
               href="/chart"
               className="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors"
             >
