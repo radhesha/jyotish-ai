@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       : `${systemPrompt}\n\n${dateStamp}`;
 
     const response = await openai.chat.completions.create({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       max_tokens: 1500,
       messages: [
         { role: "system", content: fullSystem },
