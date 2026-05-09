@@ -172,9 +172,9 @@ export default function AgentChatPage() {
     setComputedChart(loadComputedChart());
     setDataLoaded(true);
 
-    // Check if user is logged in; if so, load saved messages
-    supabase.auth.getUser().then(async ({ data }) => {
-      const uid = data.user?.id ?? null;
+    // Listen to auth state — fires immediately with current session
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const uid = session?.user?.id ?? null;
       setUserId(uid);
 
       if (uid && agent) {
@@ -196,6 +196,8 @@ export default function AgentChatPage() {
         }
       }
     });
+
+    return () => subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

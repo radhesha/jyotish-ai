@@ -19,22 +19,25 @@ export default function ReadingsPage() {
   const [authed, setAuthed]     = useState(false);
 
   useEffect(() => {
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!data.user) {
-        router.replace("/login");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!session) {
+        router.replace("/login?next=/readings");
         return;
       }
       setAuthed(true);
 
-      const { data: rows } = await supabase
+      const { data: rows, error } = await supabase
         .from("readings")
         .select("agent_id, updated_at, messages")
-        .eq("user_id", data.user.id)
+        .eq("user_id", session.user.id)
         .order("updated_at", { ascending: false });
 
+      if (error) console.error("Load readings error:", error.message);
       setReadings((rows ?? []).filter((r: SavedReading) => r.messages?.length > 0));
       setLoading(false);
     });
+
+    return () => subscription.unsubscribe();
   }, [router]);
 
   if (!authed || loading) {

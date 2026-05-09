@@ -1,16 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { Suspense } from "react";
 
-export default function LoginPage() {
-  const router = useRouter();
+function LoginForm() {
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+  const next         = searchParams.get("next") ?? "/chart";
+
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
+
+  // If already logged in, redirect immediately
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) router.replace(next);
+    });
+  }, [next, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,14 +36,14 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/chart");
+    router.push(next);
   }
 
   async function handleGoogle() {
     setError("");
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/chart` },
+      options: { redirectTo: `${window.location.origin}${next}` },
     });
     if (authError) setError(authError.message);
   }
@@ -48,7 +59,6 @@ export default function LoginPage() {
         <h1 className="font-playfair text-2xl font-bold text-zinc-100 mb-1">Welcome back</h1>
         <p className="text-sm text-zinc-500 mb-8">Continue your conversations with your advisors.</p>
 
-        {/* Google OAuth */}
         <button
           onClick={handleGoogle}
           type="button"
@@ -124,5 +134,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
