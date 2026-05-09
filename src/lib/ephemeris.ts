@@ -48,10 +48,15 @@ function jdToDate(jd: number): Date {
   return new Date((jd - 2440587.5) * 86400000);
 }
 
-/** Apparent geocentric tropical ecliptic longitude for a named body */
+/** Apparent geocentric tropical ecliptic longitude for a named body.
+ *  Uses GeoVector → Ecliptic which gives true geocentric positions for all
+ *  bodies including the Sun. (EclipticLongitude is heliocentric and throws
+ *  for the Sun, so we do not use it.) */
 function bodyLongitude(body: string, jd: number): number {
   const time = Astronomy.MakeTime(jdToDate(jd));
-  return norm360(Astronomy.EclipticLongitude(body as Astronomy.Body, time));
+  const vec  = Astronomy.GeoVector(body as Astronomy.Body, time, true);
+  const ecl  = Astronomy.Ecliptic(vec);
+  return norm360(ecl.elon);
 }
 
 /** Check retrograde by comparing longitude half a day either side */
