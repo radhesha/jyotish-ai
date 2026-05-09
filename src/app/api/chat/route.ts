@@ -56,6 +56,20 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("Chat API error:", err);
+    // Surface quota/rate-limit errors clearly so they're diagnosable
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("429") || msg.includes("quota") || msg.includes("RESOURCE_EXHAUSTED")) {
+      return NextResponse.json(
+        { error: "The AI service is temporarily unavailable (quota exceeded). Please try again in a few minutes." },
+        { status: 429 }
+      );
+    }
+    if (msg.includes("401") || msg.includes("API key")) {
+      return NextResponse.json(
+        { error: "AI service configuration error. Please contact support." },
+        { status: 500 }
+      );
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

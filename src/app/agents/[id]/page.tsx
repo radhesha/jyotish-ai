@@ -225,7 +225,7 @@ export default function AgentChatPage() {
         {
           id: generateId(),
           role: "assistant",
-          content: data.content ?? "I was unable to process that request.",
+          content: data.content ?? data.error ?? "I was unable to process that request.",
           timestamp: new Date(),
         },
       ]);
