@@ -57,6 +57,7 @@ export default function HomePage() {
           <div className="hidden items-center gap-8 text-sm text-neutral-400 md:flex">
             <Link href="#advisors" className="hover:text-neutral-100 transition-colors">Advisors</Link>
             <Link href="#how" className="hover:text-neutral-100 transition-colors">How It Works</Link>
+            <Link href="/readings" className="hover:text-neutral-100 transition-colors">My Readings</Link>
             <Link href="/blog" className="hover:text-neutral-100 transition-colors">Blog</Link>
             <Link href="/pricing" className="hover:text-neutral-100 transition-colors">Pricing</Link>
           </div>

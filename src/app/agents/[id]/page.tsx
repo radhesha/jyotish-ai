@@ -318,6 +318,14 @@ export default function AgentChatPage() {
         <Link href="/agents" className="text-zinc-600 hover:text-zinc-400 transition-colors text-sm">
           ← Advisors
         </Link>
+        {userId && (
+          <>
+            <div className="h-4 w-px bg-zinc-800" />
+            <Link href="/readings" className="text-zinc-600 hover:text-amber-400 transition-colors text-sm">
+              My Readings
+            </Link>
+          </>
+        )}
         <div className="h-4 w-px bg-zinc-800" />
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800/60 text-xl">
