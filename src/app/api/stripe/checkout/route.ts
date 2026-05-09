@@ -2,12 +2,16 @@ import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { PRICING_PLANS } from "@/lib/pricing";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-  apiVersion: "2026-04-22.dahlia",
-});
+// Lazy init — avoids crash at build time when env var isn't set
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("STRIPE_SECRET_KEY is not configured");
+  return new Stripe(key, { apiVersion: "2026-04-22.dahlia" });
+}
 
 export async function POST(req: NextRequest) {
   try {
+    const stripe = getStripe();
     const { tier, userId, email } = await req.json();
 
     const plan = PRICING_PLANS.find((p) => p.id === tier);

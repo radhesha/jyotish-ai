@@ -9,7 +9,7 @@
  * Dasha: Vimshottari mean-node system.
  */
 
-import Astronomy from "astronomy-engine";
+import * as Astronomy from "astronomy-engine";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
