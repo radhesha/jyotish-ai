@@ -159,10 +159,11 @@ export default function AgentChatPage() {
   const saveMessages = useCallback(async (msgs: Message[], uid: string, agentId: string) => {
     if (!uid) return;
     const payload = msgs.map(m => ({ role: m.role, content: m.content, timestamp: m.timestamp }));
-    await supabase.from("readings").upsert(
+    const { error } = await supabase.from("readings").upsert(
       { user_id: uid, agent_id: agentId, messages: payload, updated_at: new Date().toISOString() },
       { onConflict: "user_id,agent_id" }
     );
+    if (error) console.error("Save reading error:", error.message, error.code);
   }, []);
 
   // Load chart data + auth state + previous messages
@@ -469,6 +470,10 @@ export default function AgentChatPage() {
         </div>
         <p className="mt-2 text-center text-xs text-zinc-800">
           Enter to send · Shift+Enter for new line
+          {userId
+            ? <span className="ml-2 text-emerald-900">· ✦ Saving to account</span>
+            : <span className="ml-2"><Link href="/login" className="text-amber-900 hover:text-amber-700">Sign in to save readings</Link></span>
+          }
         </p>
       </div>
 
