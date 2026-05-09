@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     const response = await openai.chat.completions.create({
       model: "gemini-2.5-flash",
-      max_tokens: 1500,
+      max_tokens: 8192,
       messages: [
         { role: "system", content: fullSystem },
         ...messages.map((m: { role: string; content: string }) => ({
