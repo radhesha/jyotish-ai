@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import type { ComputedChart } from "@/types";
 
 export interface BirthData {
   name: string;
@@ -9,36 +11,45 @@ export interface BirthData {
   tobUnknown: boolean;
   city: string;
   country: string;
-  chartDetails?: string; // optional pasted chart data
+  utcOffset: number;  // UTC offset in decimal hours, e.g. 5.5 for IST
 }
 
-const STORAGE_KEY = "astro_birth_data";
+const BIRTH_KEY  = "astro_birth_data";
+const CHART_KEY  = "astro_computed_chart";
 
 export function saveBirthData(data: BirthData) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(BIRTH_KEY, JSON.stringify(data));
 }
-
 export function loadBirthData(): BirthData | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(BIRTH_KEY);
     return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
+}
+export function clearBirthData() {
+  localStorage.removeItem(BIRTH_KEY);
+  localStorage.removeItem(CHART_KEY);
 }
 
-export function clearBirthData() {
-  localStorage.removeItem(STORAGE_KEY);
+export function saveComputedChart(chart: ComputedChart) {
+  localStorage.setItem(CHART_KEY, JSON.stringify(chart));
+}
+export function loadComputedChart(): ComputedChart | null {
+  try {
+    const raw = localStorage.getItem(CHART_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
 }
 
 interface Props {
-  onComplete: (data: BirthData) => void;
+  onComplete?: (data: BirthData) => void;
   agentName?: string;
   agentIcon?: string;
   agentColor?: string;
 }
 
 export default function BirthDetailsForm({ onComplete, agentName, agentIcon, agentColor }: Props) {
+  const router = useRouter();
   const [step, setStep] = useState<"intro" | "form">("intro");
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
@@ -46,15 +57,20 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
   const [tobUnknown, setTobUnknown] = useState(false);
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [chartDetails, setChartDetails] = useState("");
-  const [showChartDetails, setShowChartDetails] = useState(false);
+  const [utcOffset, setUtcOffset] = useState("5.5"); // default IST
   const [error, setError] = useState("");
+  const [computing, setComputing] = useState(false);
+  const [computeStep, setComputeStep] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const accentColor = agentColor ?? "#f59e0b";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dob) { setError("Please enter your date of birth."); return; }
-    if (!city.trim()) { setError("Please enter your city of birth."); return; }
-    if (!country.trim()) { setError("Please enter your country of birth."); return; }
+    setError("");
+
+    if (!dob)          { setError("Please enter your date of birth."); return; }
+    if (!city.trim())  { setError("Please enter your city of birth."); return; }
+    if (!country.trim()){ setError("Please enter your country of birth."); return; }
 
     const data: BirthData = {
       name: name.trim(),
@@ -63,13 +79,45 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
       tobUnknown,
       city: city.trim(),
       country: country.trim(),
-      chartDetails: chartDetails.trim() || undefined,
+      utcOffset: parseFloat(utcOffset) || 0,
     };
-    saveBirthData(data);
-    onComplete(data);
-  };
 
-  const accentColor = agentColor ?? "#f59e0b";
+    setComputing(true);
+    setComputeStep("Finding your birth location…");
+
+    try {
+      setComputeStep("Computing planetary positions…");
+      const res = await fetch("/api/chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error ?? "Chart computation failed");
+      }
+
+      const chart: ComputedChart = await res.json();
+
+      setComputeStep("Saving your chart…");
+      saveBirthData(data);
+      saveComputedChart(chart);
+
+      if (onComplete) {
+        // Parent handles what happens next (e.g. chart page shows the chart inline)
+        onComplete(data);
+      } else {
+        // Default: navigate to chart page
+        router.push("/chart");
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+      setComputing(false);
+      setComputeStep("");
+    }
+  };
 
   if (step === "intro") {
     return (
@@ -80,15 +128,14 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
             Hi, I&apos;m {agentName ?? "your advisor"}
           </h2>
           <p className="mt-3 text-neutral-500 leading-relaxed text-sm">
-            To give you a personalised reading based on your birth chart, I need a few details first. It only takes 30 seconds.
+            First, I&apos;ll generate your personalised birth chart — free, instantly. Then we can talk about anything in it.
           </p>
         </div>
         <div className="w-full rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-left space-y-3">
           {[
-            { icon: "📅", label: "Date of birth", note: "Required" },
-            { icon: "⏰", label: "Time of birth", note: "Optional — improves accuracy" },
+            { icon: "📅", label: "Date of birth",          note: "Required" },
+            { icon: "⏰", label: "Time of birth",          note: "Optional — improves accuracy" },
             { icon: "📍", label: "City & country of birth", note: "Required" },
-            { icon: "📋", label: "Your chart details", note: "Optional — for a more precise reading" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3">
               <span className="text-xl shrink-0">{item.icon}</span>
@@ -99,12 +146,18 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
             </div>
           ))}
         </div>
+        <div className="w-full rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-left">
+          <p className="text-xs text-amber-400/80 font-medium">✦ Free for everyone</p>
+          <p className="text-xs text-neutral-600 mt-1">
+            Your Vedic &amp; KP birth charts are generated instantly at no cost.
+          </p>
+        </div>
         <button
           onClick={() => setStep("form")}
           className="w-full rounded-full py-3.5 text-sm font-semibold text-neutral-950 transition-all hover:opacity-90"
           style={{ backgroundColor: accentColor }}
         >
-          Enter My Details →
+          Generate My Chart →
         </button>
         <p className="text-xs text-neutral-700">
           Your details are stored only on your device. We never send them to a server.
@@ -119,6 +172,7 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
         <button
           onClick={() => setStep("intro")}
           className="mb-6 text-xs text-neutral-600 hover:text-neutral-400 transition-colors"
+          disabled={computing}
         >
           ← Back
         </button>
@@ -127,7 +181,7 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
           Your birth details
         </h2>
         <p className="text-sm text-neutral-600 mb-6">
-          Used only to read your chart. Stored on your device.
+          Used only to compute your chart. Stored on your device.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -141,7 +195,8 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Priya"
-              className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors"
+              disabled={computing}
+              className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors disabled:opacity-50"
             />
           </div>
 
@@ -155,7 +210,8 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
               value={dob}
               onChange={(e) => setDob(e.target.value)}
               max={new Date().toISOString().split("T")[0]}
-              className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 outline-none focus:border-neutral-600 transition-colors [color-scheme:dark]"
+              disabled={computing}
+              className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 outline-none focus:border-neutral-600 transition-colors [color-scheme:dark] disabled:opacity-50"
             />
           </div>
 
@@ -166,14 +222,15 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
             </label>
             {tobUnknown ? (
               <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3 text-sm text-neutral-600">
-                Unknown — I'll work with what I have
+                Unknown — chart will use solar positions
               </div>
             ) : (
               <input
                 type="time"
                 value={tob}
                 onChange={(e) => setTob(e.target.value)}
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 outline-none focus:border-neutral-600 transition-colors [color-scheme:dark]"
+                disabled={computing}
+                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 outline-none focus:border-neutral-600 transition-colors [color-scheme:dark] disabled:opacity-50"
               />
             )}
             <label className="mt-2 flex items-center gap-2 cursor-pointer">
@@ -181,13 +238,14 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
                 type="checkbox"
                 checked={tobUnknown}
                 onChange={(e) => setTobUnknown(e.target.checked)}
+                disabled={computing}
                 className="rounded border-neutral-700 bg-neutral-800 accent-amber-400"
               />
-              <span className="text-xs text-neutral-600">I don't know my birth time</span>
+              <span className="text-xs text-neutral-600">I don&apos;t know my birth time</span>
             </label>
           </div>
 
-          {/* City */}
+          {/* City + Country */}
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-neutral-500 mb-1.5 uppercase tracking-wider">
@@ -198,7 +256,8 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="e.g. Mumbai"
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors"
+                disabled={computing}
+                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors disabled:opacity-50"
               />
             </div>
             <div>
@@ -210,35 +269,43 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="e.g. India"
-                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors"
+                disabled={computing}
+                className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors disabled:opacity-50"
               />
             </div>
           </div>
 
-          {/* Optional chart details */}
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => setShowChartDetails(!showChartDetails)}
-              className="flex items-center gap-1.5 text-xs text-neutral-600 hover:text-neutral-400 transition-colors"
+          {/* UTC Offset */}
+          <div>
+            <label className="block text-xs font-medium text-neutral-500 mb-1.5 uppercase tracking-wider">
+              UTC Offset <span className="text-red-500">*</span>
+              <span className="ml-1 text-neutral-700 normal-case font-normal">— timezone at birth place</span>
+            </label>
+            <select
+              value={utcOffset}
+              onChange={(e) => setUtcOffset(e.target.value)}
+              disabled={computing}
+              className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 outline-none focus:border-neutral-600 transition-colors disabled:opacity-50 [color-scheme:dark]"
             >
-              <span>{showChartDetails ? "▾" : "▸"}</span>
-              Have your chart details? Paste them for a more precise reading
-            </button>
-            {showChartDetails && (
-              <div className="mt-3">
-                <p className="text-xs text-neutral-700 mb-2">
-                  Copy your planetary positions, house cusps, or Dasha periods from any astrology app (AstroSage, Jagannatha Hora, Astro-Vision, etc.) and paste below.
-                </p>
-                <textarea
-                  value={chartDetails}
-                  onChange={(e) => setChartDetails(e.target.value)}
-                  placeholder="e.g. Sun 12°34' Aries, Moon 5°20' Scorpio, Lagna: Capricorn 18°, Saturn MD until Jan 2027..."
-                  rows={5}
-                  className="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-xs text-neutral-300 placeholder-neutral-700 outline-none focus:border-neutral-600 transition-colors resize-none"
-                />
-              </div>
-            )}
+              {[
+                ["-12","UTC−12:00"],  ["-11","UTC−11:00"],  ["-10","UTC−10:00"],
+                ["-9.5","UTC−09:30"],["-9","UTC−09:00"],    ["-8","UTC−08:00"],
+                ["-7","UTC−07:00"],  ["-6","UTC−06:00"],    ["-5","UTC−05:00"],
+                ["-4.5","UTC−04:30"],["-4","UTC−04:00"],    ["-3.5","UTC−03:30"],
+                ["-3","UTC−03:00"],  ["-2","UTC−02:00"],    ["-1","UTC−01:00"],
+                ["0","UTC±00:00"],   ["1","UTC+01:00"],     ["2","UTC+02:00"],
+                ["3","UTC+03:00"],   ["3.5","UTC+03:30"],   ["4","UTC+04:00"],
+                ["4.5","UTC+04:30"], ["5","UTC+05:00"],     ["5.5","UTC+05:30 — India (IST)"],
+                ["5.75","UTC+05:45 — Nepal"],               ["6","UTC+06:00"],
+                ["6.5","UTC+06:30 — Myanmar"],              ["7","UTC+07:00"],
+                ["8","UTC+08:00"],   ["8.75","UTC+08:45"],  ["9","UTC+09:00"],
+                ["9.5","UTC+09:30"], ["10","UTC+10:00"],    ["10.5","UTC+10:30"],
+                ["11","UTC+11:00"],  ["12","UTC+12:00"],    ["12.75","UTC+12:45"],
+                ["13","UTC+13:00"],  ["14","UTC+14:00"],
+              ].map(([val, label]) => (
+                <option key={val} value={val}>{label}</option>
+              ))}
+            </select>
           </div>
 
           {error && (
@@ -249,10 +316,18 @@ export default function BirthDetailsForm({ onComplete, agentName, agentIcon, age
 
           <button
             type="submit"
-            className="w-full rounded-full py-3.5 text-sm font-semibold text-neutral-950 transition-all hover:opacity-90 mt-2"
+            disabled={computing}
+            className="w-full rounded-full py-3.5 text-sm font-semibold text-neutral-950 transition-all hover:opacity-90 mt-2 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             style={{ backgroundColor: accentColor }}
           >
-            Start My Reading →
+            {computing ? (
+              <>
+                <span className="h-4 w-4 rounded-full border-2 border-neutral-950/30 border-t-neutral-950 animate-spin" />
+                {computeStep}
+              </>
+            ) : (
+              "Generate My Chart →"
+            )}
           </button>
         </form>
       </div>

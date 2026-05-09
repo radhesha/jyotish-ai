@@ -62,10 +62,10 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
-              href="/agents"
+              href="/chart"
               className="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-neutral-950 hover:bg-amber-400 transition-colors"
             >
-              Try Free →
+              Get My Chart Free →
             </Link>
           </div>
         </div>
@@ -97,10 +97,10 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/agents"
+              href="/chart"
               className="rounded-full bg-amber-500 px-8 py-3.5 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
             >
-              Start Free — No Sign Up →
+              Generate My Chart Free →
             </Link>
             <Link
               href="#advisors"
@@ -109,7 +109,7 @@ export default function HomePage() {
               Meet the Advisors
             </Link>
           </div>
-          <p className="mt-4 text-sm text-neutral-600">No sign up required · No credit card needed</p>
+          <p className="mt-4 text-sm text-neutral-600">Free birth chart · No sign up · No credit card</p>
         </div>
 
         {/* Chat demo */}
@@ -259,21 +259,21 @@ export default function HomePage() {
             {[
               {
                 step: "1",
-                icon: "📅",
-                title: "Enter your birth details",
-                desc: "Your date, time, and place of birth. That's all we need to build your personal birth chart — the map that makes every reading personal to you.",
+                icon: "☸",
+                title: "Generate your birth chart",
+                desc: "Enter your date, time, and city of birth. We instantly compute your full Vedic and KP birth charts — planetary positions, house placements, and your Dasha timeline. Free, always.",
               },
               {
                 step: "2",
                 icon: "🎯",
                 title: "Pick your advisor",
-                desc: "Choose the specialist that matches your question. Career worries? Talk to Dhruva. Want to know when you'll marry? Ask Ananya or Bandhu. Need a yes/no answer fast? Try Prashna.",
+                desc: "Choose the specialist that matches your question. Career? Talk to Dhruva or Kriya. Love? Ask Ananya or Bandhu. Need a yes/no with timing? Try Prashna or Kairos.",
               },
               {
                 step: "3",
                 icon: "💬",
                 title: "Get your answer",
-                desc: "Chat naturally — no astrology knowledge needed. Your advisor reads your chart and gives you clear, personalised insights in plain English.",
+                desc: "Chat naturally — no astrology knowledge needed. Your advisor reads your actual computed chart and gives clear, personalised insights in plain English.",
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
@@ -381,7 +381,7 @@ export default function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href={plan.price === 0 ? "/agents" : "/pricing"}
+                  href={plan.price === 0 ? "/chart" : "/pricing"}
                   className={`mt-8 block rounded-full py-3 text-center text-sm font-semibold transition-colors ${
                     plan.highlight
                       ? "bg-amber-500 text-neutral-950 hover:bg-amber-400"
@@ -407,10 +407,10 @@ export default function HomePage() {
             Not vague horoscopes. Not generic advice. Personal insights from your birth chart — answered by a specialist who knows exactly what to look for.
           </p>
           <Link
-            href="/agents"
+            href="/chart"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-500 px-10 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition-all"
           >
-            Chat with an Advisor Free →
+            Generate My Chart Free →
           </Link>
           <p className="mt-3 text-sm text-neutral-700">No sign up · No credit card · No astrology knowledge needed</p>
         </div>
